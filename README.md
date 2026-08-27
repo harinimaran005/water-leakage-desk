@@ -1,16 +1,54 @@
-# React + Vite
+# 💧 Water Leakage & Maintenance Issue Desk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive web application for reporting, tracking, and managing
+water leakage and maintenance issues.
 
-Currently, two official plugins are available:
+## 📌 Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The Water Leakage & Maintenance Issue Desk helps residents report
+water leakage problems and allows maintenance administrators to
+manage those issues efficiently.
 
-## React Compiler
+The system provides separate access for Residents and Maintenance
+Admins using role-based access control.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 👥 User Roles
 
-## Expanding the ESLint configuration
+### 🏠 Resident
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Residents can:
+
+- Login as a Resident
+- Report water leakage or maintenance issues
+- Select the issue location
+- Select severity
+- Add a detailed description
+- View their reported issues
+- Track issue status
+- See the assigned technician
+
+### 🛠️ Maintenance Admin
+
+Maintenance Admins can:
+
+- Login as a Maintenance Admin
+- View all reported issues
+- Filter issues by severity
+- Filter issues by location
+- Assign technicians
+- Change issue status
+- Mark issues as resolved
+- View issue statistics
+
+## 🔄 Issue Workflow
+
+```text
+Resident Reports Issue
+        ↓
+      Pending
+        ↓
+Technician Assigned
+        ↓
+    In Progress
+        ↓
+      Resolved
