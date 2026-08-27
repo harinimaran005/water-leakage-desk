@@ -1,0 +1,29 @@
+{
+  "issues": [
+    {
+      "location": "kitchen",
+      "severity": "Medium",
+      "description": "leakage in pipe\n\n",
+      "status": "Resolved",
+      "technician": "Ravi",
+      "id": "np_4U8byNeo"
+    },
+    {
+      "location": "kitchen",
+      "severity": "High",
+      "description": "water leakage near the tab",
+      "status": "Resolved",
+      "technician": "Kumar",
+      "id": "VPVq5WiH2h0"
+    },
+    {
+      "location": "room 201",
+      "severity": "Low",
+      "description": "near tab",
+      "status": "Pending",
+      "technician": "Unassigned",
+      "id": "zDcp13rF4TU"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
