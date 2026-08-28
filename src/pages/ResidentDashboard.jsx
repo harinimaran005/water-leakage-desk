@@ -1,4 +1,6 @@
+
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function ResidentDashboard() {
   const navigate = useNavigate();
@@ -9,7 +11,12 @@ function ResidentDashboard() {
       <div className="max-w-6xl mx-auto">
 
         {/* Welcome Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
+        >
 
           <p className="text-blue-600 font-semibold text-sm uppercase tracking-wide">
             Resident Portal
@@ -24,10 +31,15 @@ function ResidentDashboard() {
             of your maintenance requests.
           </p>
 
-        </div>
+        </motion.div>
 
         {/* Quick Actions */}
-        <div className="mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mt-8"
+        >
 
           <h2 className="text-2xl font-bold text-gray-800">
             Quick Actions
@@ -37,13 +49,19 @@ function ResidentDashboard() {
             What would you like to do?
           </p>
 
-        </div>
+        </motion.div>
 
         {/* Cards */}
         <div className="mt-5 grid gap-6 md:grid-cols-2">
 
           {/* Report Issue Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-gray-100">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-gray-100"
+          >
 
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl">
               💧
@@ -58,17 +76,25 @@ function ResidentDashboard() {
               Submit the details so our maintenance team can take action.
             </p>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => navigate("/report")}
               className="mt-6 w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
             >
               Report New Issue
-            </button>
+            </motion.button>
 
-          </div>
+          </motion.div>
 
           {/* My Issues Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-gray-100">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-gray-100"
+          >
 
             <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl">
               📋
@@ -83,19 +109,26 @@ function ResidentDashboard() {
               current status and assigned technician.
             </p>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => navigate("/my-issues")}
               className="mt-6 w-full sm:w-auto bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
             >
               View My Issues
-            </button>
+            </motion.button>
 
-          </div>
+          </motion.div>
 
         </div>
 
         {/* Information Section */}
-        <div className="mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-6"
+        >
 
           <h3 className="text-lg font-bold text-blue-800">
             How it works
@@ -132,7 +165,7 @@ function ResidentDashboard() {
 
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
 
@@ -141,3 +174,4 @@ function ResidentDashboard() {
 }
 
 export default ResidentDashboard;
+

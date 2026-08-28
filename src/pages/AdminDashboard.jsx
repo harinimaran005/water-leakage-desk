@@ -1,5 +1,7 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 function AdminDashboard() {
   const [issues, setIssues] = useState([]);
@@ -124,13 +126,21 @@ function AdminDashboard() {
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
+        >
 
           <div className="flex items-center gap-4">
 
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl">
+            <motion.div
+              whileHover={{ rotate: 5, scale: 1.05 }}
+              className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl"
+            >
               🛠️
-            </div>
+            </motion.div>
 
             <div>
               <p className="text-blue-600 font-semibold text-sm uppercase tracking-wide">
@@ -148,13 +158,19 @@ function AdminDashboard() {
             Manage reported water leakage and maintenance issues.
           </p>
 
-        </div>
+        </motion.div>
 
         {/* Statistics */}
         <div className="grid gap-5 mt-8 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Total */}
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            whileHover={{ y: -4 }}
+            className="bg-white rounded-2xl shadow-sm p-6"
+          >
             <p className="text-gray-500 font-medium">
               Total Issues
             </p>
@@ -166,10 +182,16 @@ function AdminDashboard() {
             <p className="text-sm text-gray-500 mt-2">
               All reported issues
             </p>
-          </div>
+          </motion.div>
 
           {/* Pending */}
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            whileHover={{ y: -4 }}
+            className="bg-white rounded-2xl shadow-sm p-6"
+          >
             <p className="text-gray-500 font-medium">
               Pending
             </p>
@@ -181,10 +203,16 @@ function AdminDashboard() {
             <p className="text-sm text-gray-500 mt-2">
               Waiting for technician
             </p>
-          </div>
+          </motion.div>
 
           {/* In Progress */}
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            whileHover={{ y: -4 }}
+            className="bg-white rounded-2xl shadow-sm p-6"
+          >
             <p className="text-gray-500 font-medium">
               In Progress
             </p>
@@ -196,10 +224,16 @@ function AdminDashboard() {
             <p className="text-sm text-gray-500 mt-2">
               Currently being handled
             </p>
-          </div>
+          </motion.div>
 
           {/* Resolved */}
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            whileHover={{ y: -4 }}
+            className="bg-white rounded-2xl shadow-sm p-6"
+          >
             <p className="text-gray-500 font-medium">
               Resolved
             </p>
@@ -211,12 +245,17 @@ function AdminDashboard() {
             <p className="text-sm text-gray-500 mt-2">
               Successfully completed
             </p>
-          </div>
+          </motion.div>
 
         </div>
 
         {/* Reported Issues Section */}
-        <div className="bg-white rounded-2xl shadow-sm mt-8 p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="bg-white rounded-2xl shadow-sm mt-8 p-6 md:p-8"
+        >
 
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
@@ -293,16 +332,24 @@ function AdminDashboard() {
 
           {/* Loading */}
           {loading && (
-            <div className="text-center py-10">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-10"
+            >
               <p className="text-gray-500">
                 Loading issues...
               </p>
-            </div>
+            </motion.div>
           )}
 
           {/* No Issues */}
           {!loading && filteredIssues.length === 0 && (
-            <div className="text-center py-10">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-10"
+            >
 
               <div className="text-5xl">
                 📭
@@ -316,18 +363,30 @@ function AdminDashboard() {
                 No issues match the selected filters.
               </p>
 
-            </div>
+            </motion.div>
           )}
 
           {/* Issues */}
           {!loading && filteredIssues.length > 0 && (
 
-            <div className="mt-6 space-y-5">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="mt-6 space-y-5"
+            >
 
-              {filteredIssues.map((issue) => (
+              {filteredIssues.map((issue, index) => (
 
-                <div
+                <motion.div
                   key={issue.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.08,
+                  }}
+                  whileHover={{ y: -3 }}
                   className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition"
                 >
 
@@ -454,34 +513,40 @@ function AdminDashboard() {
 
                   {/* Resolve */}
                   {issue.status !== "Resolved" && (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() =>
                         markAsResolved(issue.id)
                       }
                       className="mt-5 w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition"
                     >
                       ✓ Mark as Resolved
-                    </button>
+                    </motion.button>
                   )}
 
                   {/* Resolved */}
                   {issue.status === "Resolved" && (
-                    <div className="mt-5 bg-green-50 border border-green-100 rounded-lg p-4">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="mt-5 bg-green-50 border border-green-100 rounded-lg p-4"
+                    >
                       <p className="font-semibold text-green-700">
                         ✓ Issue Resolved Successfully
                       </p>
-                    </div>
+                    </motion.div>
                   )}
 
-                </div>
+                </motion.div>
 
               ))}
 
-            </div>
+            </motion.div>
 
           )}
 
-        </div>
+        </motion.div>
 
       </div>
 
