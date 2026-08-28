@@ -12,7 +12,7 @@ function MyIssues() {
   const fetchIssues = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/issues"
+        "https://water-leakage-api-cxcg.onrender.com/issues"
       );
 
       setIssues(response.data);

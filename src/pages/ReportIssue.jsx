@@ -13,7 +13,7 @@ function ReportIssue() {
     setSubmitting(true);
 
     try {
-      await axios.post("http://localhost:5000/issues", {
+      await axios.post("https://water-leakage-api-cxcg.onrender.com/issues", {
         location,
         severity,
         description,

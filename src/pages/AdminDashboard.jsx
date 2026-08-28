@@ -15,7 +15,7 @@ function AdminDashboard() {
   const fetchIssues = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/issues"
+        "https://water-leakage-api-cxcg.onrender.com/issues"
       );
 
       setIssues(response.data);
@@ -30,7 +30,7 @@ function AdminDashboard() {
   const assignTechnician = async (issueId, technician) => {
     try {
       await axios.patch(
-        `http://localhost:5000/issues/${issueId}`,
+        `https://water-leakage-api-cxcg.onrender.com/issues/${issueId}`,
         {
           technician: technician,
           status:
@@ -52,7 +52,7 @@ function AdminDashboard() {
   const markAsResolved = async (issueId) => {
     try {
       await axios.patch(
-        `http://localhost:5000/issues/${issueId}`,
+        `https://water-leakage-api-cxcg.onrender.com/issues/${issueId}`,
         {
           status: "Resolved",
         }
