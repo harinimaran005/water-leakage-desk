@@ -14,6 +14,7 @@ function AdminDashboard() {
     fetchIssues();
   }, []);
 
+  // Fetch Issues
   const fetchIssues = async () => {
     try {
       const response = await axios.get(
@@ -81,20 +82,64 @@ function AdminDashboard() {
     (issue) => issue.status === "Resolved"
   ).length;
 
-  // Filters
-  const filteredIssues = issues.filter((issue) => {
-    const matchesSeverity =
-      severityFilter === "All" ||
-      issue.severity === severityFilter;
+  // Severity Priority
+  const getSeverityOrder = (severity) => {
+    if (severity === "High") return 1;
+    if (severity === "Medium") return 2;
+    if (severity === "Low") return 3;
+    return 4;
+  };
 
-    const matchesLocation =
-      locationFilter === "All" ||
-      issue.location === locationFilter;
+  // Workflow Priority
+  // 1 = Unassigned
+  // 2 = In Progress / Assigned
+  // 3 = Resolved
+  const getWorkflowOrder = (issue) => {
+    const isUnassigned =
+      !issue.technician ||
+      issue.technician === "Unassigned";
 
-    return matchesSeverity && matchesLocation;
-  });
+    if (isUnassigned) {
+      return 1;
+    }
 
-  // Status styles
+    if (issue.status === "Resolved") {
+      return 3;
+    }
+
+    return 2;
+  };
+
+  // Smart Filtering + Sorting
+  const filteredIssues = issues
+    .filter((issue) => {
+      const matchesSeverity =
+        severityFilter === "All" ||
+        issue.severity === severityFilter;
+
+      const matchesLocation =
+        locationFilter === "All" ||
+        issue.location === locationFilter;
+
+      return matchesSeverity && matchesLocation;
+    })
+    .sort((a, b) => {
+      // First sort by workflow
+      const workflowDifference =
+        getWorkflowOrder(a) - getWorkflowOrder(b);
+
+      if (workflowDifference !== 0) {
+        return workflowDifference;
+      }
+
+      // Then sort by severity
+      return (
+        getSeverityOrder(a.severity) -
+        getSeverityOrder(b.severity)
+      );
+    });
+
+  // Status Badge Style
   const getStatusStyle = (status) => {
     if (status === "Resolved") {
       return "bg-green-100 text-green-700";
@@ -107,7 +152,7 @@ function AdminDashboard() {
     return "bg-yellow-100 text-yellow-700";
   };
 
-  // Severity styles
+  // Severity Badge Style
   const getSeverityStyle = (severity) => {
     if (severity === "High") {
       return "bg-red-100 text-red-700";
@@ -120,9 +165,45 @@ function AdminDashboard() {
     return "bg-green-100 text-green-700";
   };
 
+  // Priority Badge
+  const getPriority = (issue) => {
+    const isUnassigned =
+      !issue.technician ||
+      issue.technician === "Unassigned";
+
+    if (isUnassigned && issue.severity === "High") {
+      return "Urgent";
+    }
+
+    if (issue.severity === "High") {
+      return "High";
+    }
+
+    if (issue.severity === "Medium") {
+      return "Medium";
+    }
+
+    return "Low";
+  };
+
+  const getPriorityStyle = (priority) => {
+    if (priority === "Urgent") {
+      return "bg-red-600 text-white";
+    }
+
+    if (priority === "High") {
+      return "bg-orange-100 text-orange-700";
+    }
+
+    if (priority === "Medium") {
+      return "bg-yellow-100 text-yellow-700";
+    }
+
+    return "bg-green-100 text-green-700";
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-8 sm:px-6 lg:px-8">
-
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
@@ -132,7 +213,6 @@ function AdminDashboard() {
           transition={{ duration: 0.5 }}
           className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
         >
-
           <div className="flex items-center gap-4">
 
             <motion.div
@@ -157,7 +237,6 @@ function AdminDashboard() {
           <p className="text-gray-600 mt-4">
             Manage reported water leakage and maintenance issues.
           </p>
-
         </motion.div>
 
         {/* Statistics */}
@@ -249,7 +328,7 @@ function AdminDashboard() {
 
         </div>
 
-        {/* Reported Issues Section */}
+        {/* Reported Issues */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -263,7 +342,8 @@ function AdminDashboard() {
             </h2>
 
             <p className="text-gray-500 mt-1">
-              Review, assign and resolve maintenance requests.
+              Unassigned issues appear first, followed by assigned
+              and resolved issues.
             </p>
           </div>
 
@@ -289,10 +369,21 @@ function AdminDashboard() {
                   }
                   className="w-full border border-gray-300 bg-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="All">All Severities</option>
-                  <option value="Low">Low</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
+                  <option value="All">
+                    All Severities
+                  </option>
+
+                  <option value="Low">
+                    Low
+                  </option>
+
+                  <option value="Medium">
+                    Medium
+                  </option>
+
+                  <option value="High">
+                    High
+                  </option>
                 </select>
               </div>
 
@@ -309,7 +400,9 @@ function AdminDashboard() {
                   }
                   className="w-full border border-gray-300 bg-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="All">All Locations</option>
+                  <option value="All">
+                    All Locations
+                  </option>
 
                   {[
                     ...new Set(
@@ -327,7 +420,6 @@ function AdminDashboard() {
               </div>
 
             </div>
-
           </div>
 
           {/* Loading */}
@@ -350,7 +442,6 @@ function AdminDashboard() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-10"
             >
-
               <div className="text-5xl">
                 📭
               </div>
@@ -362,19 +453,12 @@ function AdminDashboard() {
               <p className="text-gray-500 mt-1">
                 No issues match the selected filters.
               </p>
-
             </motion.div>
           )}
 
           {/* Issues */}
           {!loading && filteredIssues.length > 0 && (
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="mt-6 space-y-5"
-            >
+            <div className="mt-6 space-y-5">
 
               {filteredIssues.map((issue, index) => (
 
@@ -390,11 +474,10 @@ function AdminDashboard() {
                   className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition"
                 >
 
-                  {/* Issue Header */}
+                  {/* Header */}
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
 
                     <div>
-
                       <p className="text-sm text-gray-400">
                         Issue #{issue.id}
                       </p>
@@ -402,10 +485,22 @@ function AdminDashboard() {
                       <h3 className="text-xl font-bold text-gray-800 mt-1">
                         {issue.location}
                       </h3>
-
                     </div>
 
                     <div className="flex flex-wrap gap-2">
+
+                      {/* Priority */}
+                      <span
+                        className={`px-4 py-2 rounded-full text-sm font-semibold ${getPriorityStyle(
+                          getPriority(issue)
+                        )}`}
+                      >
+                        {getPriority(issue) === "Urgent" && "🚨 "}
+                        {getPriority(issue) === "High" && "🔴 "}
+                        {getPriority(issue) === "Medium" && "🟡 "}
+                        {getPriority(issue) === "Low" && "🟢 "}
+                        {getPriority(issue)} Priority
+                      </span>
 
                       {/* Severity */}
                       <span
@@ -426,7 +521,6 @@ function AdminDashboard() {
                       </span>
 
                     </div>
-
                   </div>
 
                   {/* Description */}
@@ -446,7 +540,6 @@ function AdminDashboard() {
                   <div className="grid gap-5 md:grid-cols-2 mt-6 pt-5 border-t">
 
                     <div>
-
                       <p className="text-sm text-gray-500">
                         Current Technician
                       </p>
@@ -454,11 +547,9 @@ function AdminDashboard() {
                       <p className="font-semibold text-gray-800 mt-1">
                         {issue.technician || "Unassigned"}
                       </p>
-
                     </div>
 
                     <div>
-
                       <p className="text-sm text-gray-500">
                         Current Status
                       </p>
@@ -466,7 +557,6 @@ function AdminDashboard() {
                       <p className="font-semibold text-gray-800 mt-1">
                         {issue.status || "Pending"}
                       </p>
-
                     </div>
 
                   </div>
@@ -542,16 +632,15 @@ function AdminDashboard() {
 
               ))}
 
-            </motion.div>
-
+            </div>
           )}
 
         </motion.div>
 
       </div>
-
     </div>
   );
 }
 
 export default AdminDashboard;
+
