@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -10,17 +9,17 @@ function AdminDashboard() {
   const [severityFilter, setSeverityFilter] = useState("All");
   const [locationFilter, setLocationFilter] = useState("All");
 
+  const API_URL =
+    "https://water-leakage-api-cxcg.onrender.com/issues";
+
   useEffect(() => {
     fetchIssues();
   }, []);
 
-  // Fetch Issues
+  // Fetch all issues
   const fetchIssues = async () => {
     try {
-      const response = await axios.get(
-        "https://water-leakage-api-cxcg.onrender.com/issues"
-      );
-
+      const response = await axios.get(API_URL);
       setIssues(response.data);
     } catch (error) {
       console.error("Error fetching issues:", error);
@@ -32,16 +31,13 @@ function AdminDashboard() {
   // Assign Technician
   const assignTechnician = async (issueId, technician) => {
     try {
-      await axios.patch(
-        `https://water-leakage-api-cxcg.onrender.com/issues/${issueId}`,
-        {
-          technician: technician,
-          status:
-            technician === "Unassigned"
-              ? "Pending"
-              : "In Progress",
-        }
-      );
+      await axios.patch(`${API_URL}/${issueId}`, {
+        technician: technician,
+        status:
+          technician === "Unassigned"
+            ? "Pending"
+            : "In Progress",
+      });
 
       alert("Technician assigned successfully!");
       fetchIssues();
@@ -54,12 +50,9 @@ function AdminDashboard() {
   // Mark Issue as Resolved
   const markAsResolved = async (issueId) => {
     try {
-      await axios.patch(
-        `https://water-leakage-api-cxcg.onrender.com/issues/${issueId}`,
-        {
-          status: "Resolved",
-        }
-      );
+      await axios.patch(`${API_URL}/${issueId}`, {
+        status: "Resolved",
+      });
 
       alert("Issue marked as resolved!");
       fetchIssues();
@@ -69,7 +62,7 @@ function AdminDashboard() {
     }
   };
 
-  // Counts
+  // Statistics
   const pendingCount = issues.filter(
     (issue) => issue.status === "Pending"
   ).length;
@@ -82,18 +75,14 @@ function AdminDashboard() {
     (issue) => issue.status === "Resolved"
   ).length;
 
-  // Severity Priority
-  const getSeverityOrder = (severity) => {
-    if (severity === "High") return 1;
-    if (severity === "Medium") return 2;
-    if (severity === "Low") return 3;
-    return 4;
-  };
+  // --------------------------------------------------
+  // SMART ISSUE PRIORITIZATION
+  // --------------------------------------------------
 
-  // Workflow Priority
-  // 1 = Unassigned
-  // 2 = In Progress / Assigned
-  // 3 = Resolved
+  // Workflow priority:
+  // 1. Unassigned
+  // 2. In Progress
+  // 3. Resolved
   const getWorkflowOrder = (issue) => {
     const isUnassigned =
       !issue.technician ||
@@ -103,14 +92,38 @@ function AdminDashboard() {
       return 1;
     }
 
+    if (issue.status === "In Progress") {
+      return 2;
+    }
+
     if (issue.status === "Resolved") {
       return 3;
     }
 
-    return 2;
+    return 1;
   };
 
-  // Smart Filtering + Sorting
+  // Severity priority:
+  // 1. High
+  // 2. Medium
+  // 3. Low
+  const getSeverityOrder = (severity) => {
+    if (severity === "High") {
+      return 1;
+    }
+
+    if (severity === "Medium") {
+      return 2;
+    }
+
+    if (severity === "Low") {
+      return 3;
+    }
+
+    return 4;
+  };
+
+  // Filters + Smart Priority
   const filteredIssues = issues
     .filter((issue) => {
       const matchesSeverity =
@@ -124,7 +137,7 @@ function AdminDashboard() {
       return matchesSeverity && matchesLocation;
     })
     .sort((a, b) => {
-      // First sort by workflow
+      // First: workflow priority
       const workflowDifference =
         getWorkflowOrder(a) - getWorkflowOrder(b);
 
@@ -132,7 +145,7 @@ function AdminDashboard() {
         return workflowDifference;
       }
 
-      // Then sort by severity
+      // Second: severity priority
       return (
         getSeverityOrder(a.severity) -
         getSeverityOrder(b.severity)
@@ -186,6 +199,7 @@ function AdminDashboard() {
     return "Low";
   };
 
+  // Priority Badge Style
   const getPriorityStyle = (priority) => {
     if (priority === "Urgent") {
       return "bg-red-600 text-white";
@@ -342,8 +356,8 @@ function AdminDashboard() {
             </h2>
 
             <p className="text-gray-500 mt-1">
-              Unassigned issues appear first, followed by assigned
-              and resolved issues.
+              Unassigned and high-priority issues appear first,
+              followed by in-progress and resolved issues.
             </p>
           </div>
 
@@ -474,7 +488,7 @@ function AdminDashboard() {
                   className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition"
                 >
 
-                  {/* Header */}
+                  {/* Issue Header */}
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
 
                     <div>
@@ -618,8 +632,14 @@ function AdminDashboard() {
                   {/* Resolved */}
                   {issue.status === "Resolved" && (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.97 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{
+                        opacity: 0,
+                        scale: 0.97,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                      }}
                       className="mt-5 bg-green-50 border border-green-100 rounded-lg p-4"
                     >
                       <p className="font-semibold text-green-700">
@@ -629,7 +649,6 @@ function AdminDashboard() {
                   )}
 
                 </motion.div>
-
               ))}
 
             </div>
@@ -643,4 +662,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-
