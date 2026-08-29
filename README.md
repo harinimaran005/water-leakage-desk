@@ -4,9 +4,9 @@ A responsive web application for reporting, tracking, and managing water leakage
 
 ## 📌 Project Overview
 
-The Water Leakage & Maintenance Issue Desk helps residents report water leakage problems and allows maintenance administrators to manage those issues efficiently.
+The Water Leakage & Maintenance Issue Desk helps residents report water leakage problems and allows maintenance administrators to manage and resolve those issues efficiently.
 
-The system provides separate access for Residents and Maintenance Admins using role-based access control.
+The system provides separate access for **Residents** and **Maintenance Admins** using Role-Based Access Control (RBAC).
 
 ## 👥 User Roles
 
@@ -16,7 +16,7 @@ Residents can:
 
 * Login as a Resident
 * Report water leakage or maintenance issues
-* Select the issue location
+* Select issue location
 * Select severity
 * Add a detailed description
 * View their reported issues
@@ -32,46 +32,73 @@ Maintenance Admins can:
 * Filter issues by severity
 * Filter issues by location
 * Assign technicians
-* Change issue status
+* Update issue status
 * Mark issues as resolved
 * View issue statistics
 
+## 🔐 Mock Login / Role Switcher
+
+The application uses a mock role-based login for demonstration.
+
+Select the required role from the login page:
+
+* **Resident** – Accesses the Resident Dashboard
+* **Maintenance Admin** – Accesses the Maintenance Dashboard
+
+Unauthorized users are prevented from accessing role-restricted pages.
+
 ## 🔄 Issue Workflow
 
-```text
 Resident Reports Issue
         ↓
       Pending
         ↓
 Technician Assigned
         ↓
-    In Progress
+   In Progress
         ↓
      Resolved
-```
+
 
 ## 💡 Innovation – Smart Issue Prioritization
 
-The Maintenance Dashboard automatically prioritizes issues to help administrators handle important requests quickly.
+The Maintenance Dashboard includes a **Smart Issue Prioritization** feature to help administrators identify important maintenance requests quickly.
 
-Issues are organized as:
+Issues are organized based on workflow:
 
-**Unassigned → In Progress → Resolved**
 
-Within each group, issues are prioritized by severity:
+Unassigned
+    ↓
+In Progress
+    ↓
+Resolved
 
-**High → Medium → Low**
 
-This helps maintenance staff identify unassigned and high-priority issues quickly.
+Within each workflow group, issues are prioritized by severity:
+
+
+High → Medium → Low
+
+
+An **Unassigned + High Severity** issue is identified as:
+
+
+🚨 Urgent Priority
+
+
+This helps maintenance staff quickly identify high-priority issues that have not yet been assigned to a technician.
 
 ## 🎬 Bonus Feature – Smooth UI Micro-Interactions
 
 Smooth UI micro-interactions are implemented using **Framer Motion**.
 
+Implemented interactions include:
+
 * Smooth entrance animations
-* Card hover effects
-* Button hover and tap animations
+* Dashboard card hover effects
 * Issue card animations
+* Button hover and tap animations
+* Smooth visual transitions
 
 ## 🛠️ Tech Stack
 
@@ -84,8 +111,63 @@ Smooth UI micro-interactions are implemented using **Framer Motion**.
 * JSON Server
 * REST API
 
-## 🌐 Deployment
+## ⚙️ Setup Instructions
 
-**Frontend:** https://water-leakage-desk.vercel.app/
+Clone the repository:
 
-**Backend API:** https://water-leakage-api-cxcg.onrender.com/
+```bash
+git clone https://github.com/harinimaran005/water-leakage-desk.git
+```
+
+Navigate to the project folder:
+
+```bash
+cd water-leakage-desk
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at the local URL shown in the terminal.
+
+## 🧪 Test Instructions
+
+Run the application using:
+
+```bash
+npm run dev
+```
+
+The following features were manually tested:
+
+* Resident login and dashboard access
+* Resident issue reporting
+* Viewing reported issues
+* Maintenance Admin dashboard
+* Severity filtering
+* Location filtering
+* Technician assignment
+* Issue status updates
+* Issue resolution
+* Role-based access control
+* Unauthorized access handling
+* Smart issue prioritization
+* Smooth UI interactions
+
+
+## 🌐 Live Demo
+
+**Frontend:**
+https://water-leakage-desk.vercel.app/
+
+**Backend API:**
+https://water-leakage-api-cxcg.onrender.com/
